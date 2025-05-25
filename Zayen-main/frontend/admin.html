@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="admin-container">
+    <h2>Panel de Administración</h2>
+    <p>Agrega nuevas piezas al museo (nombre, imagen y audio explicativo).</p>
+
+    <form id="uploadForm">
+      <input type="text" id="titulo" placeholder="Nombre de la pieza" required />
+      <input type="file" id="imagen" accept="image/*" required />
+      <input type="file" id="audio" accept="audio/*" required />
+      <button type="submit">Guardar pieza</button>
+    </form>
+
+    <button onclick="window.location.href='index.html'">⬅ Volver a la galería</button>
+    <p id="admin-message"></p>
+  </div>
+
+  <script>
+    document.getElementById("uploadForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const titulo = document.getElementById("titulo").value;
+      const imagen = document.getElementById("imagen").files[0];
+      const audio = document.getElementById("audio").files[0];
+      const mensaje = document.getElementById("admin-message");
+
+      if (!imagen || !audio) {
+        mensaje.textContent = "Debes subir imagen y audio.";
+        mensaje.style.color = "red";
+        return;
+      }
+
+      const readerImg = new FileReader();
+      const readerAud = new FileReader();
+
+      readerImg.onload = function (eImg) {
+        const imagenURL = eImg.target.result;
+
+        readerAud.onload = function (eAud) {
+          const audioURL = eAud.target.result;
+
+          const pieza = {
+            titulo: titulo,
+            imagen: imagenURL,
+            audio: audioURL
+          };
+
+          const piezasGuardadas = JSON.parse(localStorage.getItem("piezasMuseo")) || [];
+          piezasGuardadas.push(pieza);
+          localStorage.setItem("piezasMuseo", JSON.stringify(piezasGuardadas));
+
+          mensaje.textContent = "¡Pieza guardada correctamente!";
+          mensaje.style.color = "green";
+          document.getElementById("uploadForm").reset();
+        };
+
+        readerAud.readAsDataURL(audio);
+      };
+
+      readerImg.readAsDataURL(imagen);
+    });
+  </script>
+</body>
+</html>
