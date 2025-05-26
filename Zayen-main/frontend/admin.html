@@ -21,50 +21,6 @@
     <p id="admin-message"></p>
   </div>
 
-  <script>
-    document.getElementById("uploadForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const titulo = document.getElementById("titulo").value;
-      const imagen = document.getElementById("imagen").files[0];
-      const audio = document.getElementById("audio").files[0];
-      const mensaje = document.getElementById("admin-message");
-
-      if (!imagen || !audio) {
-        mensaje.textContent = "Debes subir imagen y audio.";
-        mensaje.style.color = "red";
-        return;
-      }
-
-      const readerImg = new FileReader();
-      const readerAud = new FileReader();
-
-      readerImg.onload = function (eImg) {
-        const imagenURL = eImg.target.result;
-
-        readerAud.onload = function (eAud) {
-          const audioURL = eAud.target.result;
-
-          const pieza = {
-            titulo: titulo,
-            imagen: imagenURL,
-            audio: audioURL
-          };
-
-          const piezasGuardadas = JSON.parse(localStorage.getItem("piezasMuseo")) || [];
-          piezasGuardadas.push(pieza);
-          localStorage.setItem("piezasMuseo", JSON.stringify(piezasGuardadas));
-
-          mensaje.textContent = "¡Pieza guardada correctamente!";
-          mensaje.style.color = "green";
-          document.getElementById("uploadForm").reset();
-        };
-
-        readerAud.readAsDataURL(audio);
-      };
-
-      readerImg.readAsDataURL(imagen);
-    });
-  </script>
+  <script src="admin.js"></script>
 </body>
 </html>
