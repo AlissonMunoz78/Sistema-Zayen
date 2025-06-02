@@ -24,5 +24,10 @@ app.get('/',(req,res)=>{
     res.send("Server on")
 })
 
+// Rutas para administradores
+app.use('/api',routerAdministradores)
+// Manejo de una ruta que no sea encontrada
+app.use((req,res)=>res.status(404).send("Endpoint no encontrado - 404"))
+
 // Exportar la instancia de express por medio de app
 export default  app
